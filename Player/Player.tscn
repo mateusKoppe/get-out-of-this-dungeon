@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Player/player.png" type="Texture" id=1]
+[ext_resource path="res://Player/Player.gd" type="Script" id=2]
+[ext_resource path="res://Player/Weapon.tscn" type="PackedScene" id=3]
+
+[node name="Player" type="KinematicBody2D"]
+script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -10.0043 )
+texture = ExtResource( 1 )
+hframes = 2
+
+[node name="Weapon" parent="." instance=ExtResource( 3 )]
+position = Vector2( -4.29143, -6.11642 )
+scale = Vector2( 0.75, 0.75 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
