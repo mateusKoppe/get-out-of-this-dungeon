@@ -14,6 +14,8 @@ var move_direction = Vector2.ZERO
 var input_direction = Vector2.ZERO
 var face_direction = Vector2.RIGHT
 
+onready var hitbox = $HitboxPosition/Hitbox
+
 func get_input_direction():
 	input_direction = Vector2.ZERO
 	input_direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
@@ -28,7 +30,7 @@ func _physics_process(delta):
 			
 		ATTACK:
 			state_attack()
-	
+
 	move_and_slide(move_direction)
 	
 func state_move():
@@ -37,6 +39,7 @@ func state_move():
 		move_direction = move_direction.move_toward(input_direction * MAX_SPEED, FRICTION)
 	else:
 		move_direction = move_direction.move_toward(input_direction * MAX_SPEED, ACCELERATION)
+		hitbox.knockback_direction = face_direction
 		face_direction = Vector2.LEFT if move_direction.x < 0 else Vector2.RIGHT
 		
 	if face_direction == Vector2.LEFT:
@@ -52,7 +55,7 @@ func state_attack():
 		$AnimationPlayer.play("AttackLeft")
 	else:
 		$AnimationPlayer.play("AttackRight")
-	
+
 	move_direction = move_direction.move_toward(Vector2.ZERO * MAX_SPEED, FRICTION)
 	
 func on_attack_animation_finished():
