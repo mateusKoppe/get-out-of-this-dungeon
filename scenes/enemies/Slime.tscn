@@ -1,8 +1,11 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://assets/slime_run_spritesheeet.png" type="Texture" id=1]
 [ext_resource path="res://scenes/enemies/Wander.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/enemy.gd" type="Script" id=3]
+[ext_resource path="res://scenes/combat/Hitbox.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/combat/Hurtbox.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/enemies/PlayerDetection.tscn" type="PackedScene" id=6]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
@@ -39,9 +42,16 @@ animations = [ {
 [sub_resource type="CircleShape2D" id=8]
 radius = 3.16068
 
-[sub_resource type="CapsuleShape2D" id=9]
-radius = 4.18117
-height = 7.08442
+[sub_resource type="CapsuleShape2D" id=11]
+radius = 3.65024
+height = 4.17659
+
+[sub_resource type="CapsuleShape2D" id=10]
+radius = 5.71358
+height = 4.83849
+
+[sub_resource type="CircleShape2D" id=12]
+radius = 46.2136
 
 [node name="Slime" type="KinematicBody2D"]
 script = ExtResource( 3 )
@@ -51,25 +61,45 @@ max_hp = 3
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -7.27704 )
 frames = SubResource( 7 )
-frame = 5
+frame = 4
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 0, -4.84739 )
 shape = SubResource( 8 )
 
 [node name="Wander" parent="." instance=ExtResource( 2 )]
+visible = false
 wander_range = 60
 target_interval = 4
 target_interval_range = 1
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" parent="." instance=ExtResource( 5 )]
 collision_layer = 16
-collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-position = Vector2( 0, -4.84739 )
+[node name="HurtboxColisionShape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2( 0, -5.45988 )
 rotation = 1.57079
-shape = SubResource( 9 )
+shape = SubResource( 11 )
+
+[node name="Hitbox" parent="." instance=ExtResource( 4 )]
+visible = false
+monitorable = true
+collision_mask = 2147483652
+knockback_stregth = 140
+
+[node name="HitboxColisionShape" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2( 0, -5.90533 )
+rotation = 1.57079
+shape = SubResource( 10 )
+
+[node name="PlayerDetection" parent="." instance=ExtResource( 6 )]
+position = Vector2( 0, -4.84739 )
+
+[node name="PlayerDetectionColisionShape" type="CollisionShape2D" parent="PlayerDetection"]
+shape = SubResource( 12 )
 [connection signal="new_target_position" from="Wander" to="." method="_on_Wander_new_target_position"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+[connection signal="player_entered" from="PlayerDetection" to="." method="_on_PlayerDetection_player_entered"]
+[connection signal="player_exited" from="PlayerDetection" to="." method="_on_PlayerDetection_player_exited"]

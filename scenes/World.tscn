@@ -305,7 +305,7 @@ position = Vector2( 128, 40 )
 position = Vector2( 224, 128 )
 
 [node name="Slime6" parent="YSort" instance=ExtResource( 3 )]
-position = Vector2( 152, 160 )
+position = Vector2( 152, 157.286 )
 
 [node name="Barrel2" parent="YSort" instance=ExtResource( 9 )]
 position = Vector2( 56, 64 )

@@ -4,6 +4,11 @@ export var MAX_SPEED = 80
 export var ACCELERATION = 12
 export var FRICTION = 20
 
+export var max_hp = 1
+onready var hp = max_hp setget set_hp
+
+const Hitbox = preload("res://scripts/combat/hitbox.gd")
+
 enum {
 	MOVE,
 	ATTACK
@@ -57,6 +62,18 @@ func state_attack():
 		$AnimationPlayer.play("AttackRight")
 
 	move_direction = move_direction.move_toward(Vector2.ZERO * MAX_SPEED, FRICTION)
+
+func set_hp(value: int):
+	if value <= 0:
+		queue_free()
+	hp = value
 	
 func on_attack_animation_finished():
 	state = MOVE
+
+func _on_Hurtbox_area_entered(area: Hitbox):
+	if area.knockback_direction:
+		# TODO: Set this to work with friction instead of ACCELERATION
+		move_direction += area.knockback_direction
+	if area.damage:
+		self.hp -= area.damage
