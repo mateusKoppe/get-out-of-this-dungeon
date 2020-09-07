@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/spikes_anim_f3.png-e366ee372f1b0430ed0c5cea404b1cff.stex"
+path="res://.import/simple-dungeon-tilemap.png-bfb2b3c316b0e0ce6ac9426ea1d825b0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/floor/spikes_anim_f3.png"
-dest_files=[ "res://.import/spikes_anim_f3.png-e366ee372f1b0430ed0c5cea404b1cff.stex" ]
+source_file="res://assets/simple-dungeon-tilemap.png"
+dest_files=[ "res://.import/simple-dungeon-tilemap.png-bfb2b3c316b0e0ce6ac9426ea1d825b0.stex" ]
 
 [params]
 

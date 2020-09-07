@@ -1,56 +1,69 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=20 format=2]
 
-[ext_resource path="res://assets/slime_run_spritesheeet.png" type="Texture" id=1]
+[ext_resource path="res://assets/slime.png" type="Texture" id=1]
 [ext_resource path="res://scenes/enemies/Wander.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/enemy.gd" type="Script" id=3]
 [ext_resource path="res://scenes/combat/Hitbox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/combat/Hurtbox.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/enemies/PlayerDetection.tscn" type="PackedScene" id=6]
 
-[sub_resource type="AtlasTexture" id=1]
+[sub_resource type="CircleShape2D" id=6]
+radius = 3.16068
+
+[sub_resource type="AtlasTexture" id=15]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 1 )
 region = Rect2( 16, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 1 )
 region = Rect2( 32, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=18]
 atlas = ExtResource( 1 )
 region = Rect2( 48, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 1 )
 region = Rect2( 64, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 1 )
 region = Rect2( 80, 0, 16, 16 )
 
-[sub_resource type="SpriteFrames" id=7]
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 1 )
+region = Rect2( 112, 0, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=14]
 animations = [ {
-"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"frames": [ SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
 "loop": true,
-"name": "default",
-"speed": 10.0
+"name": "runLeft",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ) ],
+"loop": true,
+"name": "runRight",
+"speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=8]
-radius = 3.16068
-
-[sub_resource type="CapsuleShape2D" id=11]
+[sub_resource type="CapsuleShape2D" id=7]
 radius = 3.65024
 height = 4.17659
 
-[sub_resource type="CapsuleShape2D" id=10]
-radius = 5.71358
-height = 4.83849
+[sub_resource type="CapsuleShape2D" id=8]
+radius = 3.39287
+height = 5.65498
 
-[sub_resource type="CircleShape2D" id=12]
+[sub_resource type="CircleShape2D" id=9]
 radius = 46.2136
 
 [node name="Slime" type="KinematicBody2D"]
@@ -58,16 +71,17 @@ script = ExtResource( 3 )
 MAX_SPEED = 30
 max_hp = 3
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 0, -7.27704 )
-frames = SubResource( 7 )
-frame = 4
-playing = true
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, -4.84739 )
-shape = SubResource( 8 )
+shape = SubResource( 6 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0, -8 )
+frames = SubResource( 14 )
+animation = "runLeft"
+frame = 1
+playing = true
 
 [node name="Wander" parent="." instance=ExtResource( 2 )]
 visible = false
@@ -81,24 +95,24 @@ collision_layer = 16
 [node name="HurtboxColisionShape" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2( 0, -5.45988 )
 rotation = 1.57079
-shape = SubResource( 11 )
+shape = SubResource( 7 )
 
 [node name="Hitbox" parent="." instance=ExtResource( 4 )]
-visible = false
 monitorable = true
 collision_mask = 2147483652
-knockback_stregth = 140
+knockback_stregth = 200
 
 [node name="HitboxColisionShape" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2( 0, -5.90533 )
+position = Vector2( 0, -4.84739 )
 rotation = 1.57079
-shape = SubResource( 10 )
+shape = SubResource( 8 )
 
 [node name="PlayerDetection" parent="." instance=ExtResource( 6 )]
 position = Vector2( 0, -4.84739 )
 
 [node name="PlayerDetectionColisionShape" type="CollisionShape2D" parent="PlayerDetection"]
-shape = SubResource( 12 )
+visible = false
+shape = SubResource( 9 )
 [connection signal="new_target_position" from="Wander" to="." method="_on_Wander_new_target_position"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 [connection signal="player_entered" from="PlayerDetection" to="." method="_on_PlayerDetection_player_entered"]

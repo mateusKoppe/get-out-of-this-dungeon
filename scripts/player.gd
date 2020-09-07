@@ -10,16 +10,21 @@ onready var hp = max_hp setget set_hp
 const Hitbox = preload("res://scripts/combat/hitbox.gd")
 
 enum {
+	IDLE,
 	MOVE,
 	ATTACK
 }
 
-var state = MOVE
+var state = IDLE
 var move_direction = Vector2.ZERO
 var input_direction = Vector2.ZERO
-var face_direction = Vector2.RIGHT
 
 onready var hitbox = $HitboxPosition/Hitbox
+onready var animation_tree = $AnimationTree
+onready var animation_state = $AnimationTree.get("parameters/playback")
+
+func _ready():
+	animation_tree.active = true
 
 func get_input_direction():
 	input_direction = Vector2.ZERO
@@ -30,6 +35,9 @@ func get_input_direction():
 
 func _physics_process(delta):
 	match state:
+		IDLE:
+			state_idle()
+		
 		MOVE:
 			state_move()
 			
@@ -38,29 +46,37 @@ func _physics_process(delta):
 
 	move_and_slide(move_direction)
 	
+func state_idle():
+	var input_direction = get_input_direction()
+	move_direction = move_direction.move_toward(input_direction * MAX_SPEED, FRICTION)
+	animation_state.travel("Idle")
+	
+	if Input.is_action_just_pressed("attack"):
+		state = ATTACK
+	elif input_direction != Vector2.ZERO:
+		state = MOVE
+
 func state_move():
 	var input_direction = get_input_direction()
+	
 	if input_direction == Vector2.ZERO:
-		move_direction = move_direction.move_toward(input_direction * MAX_SPEED, FRICTION)
-	else:
-		move_direction = move_direction.move_toward(input_direction * MAX_SPEED, ACCELERATION)
-		hitbox.knockback_direction = face_direction
-		face_direction = Vector2.LEFT if move_direction.x < 0 else Vector2.RIGHT
-		
-	if face_direction == Vector2.LEFT:
-		$AnimationPlayer.play("IdleLeft")
-	else:
-		$AnimationPlayer.play("IdleRight")
+		state = IDLE
+		return
 		
 	if Input.is_action_just_pressed("attack"):
 		state = ATTACK
+		return
+	
+	move_direction = move_direction.move_toward(input_direction * MAX_SPEED, ACCELERATION)
+	hitbox.knockback_direction = input_direction
+	animation_tree.set("parameters/Idle/blend_position", input_direction)
+	animation_tree.set("parameters/Run/blend_position", input_direction)
+	animation_tree.set("parameters/Attack/blend_position", input_direction)
+	print(input_direction)
+	animation_state.travel("Run")
 		
 func state_attack():
-	if face_direction == Vector2.LEFT:
-		$AnimationPlayer.play("AttackLeft")
-	else:
-		$AnimationPlayer.play("AttackRight")
-
+	animation_state.travel("Attack")
 	move_direction = move_direction.move_toward(Vector2.ZERO * MAX_SPEED, FRICTION)
 
 func set_hp(value: int):

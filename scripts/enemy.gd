@@ -11,6 +11,7 @@ enum {
 
 const Hitbox = preload("res://scripts/combat/hitbox.gd")
 onready var hitbox = $Hitbox
+onready var animated_sprite = $AnimatedSprite
 
 var move_direction = Vector2.ZERO
 var wander_direction = Vector2.ZERO
@@ -36,6 +37,12 @@ func move_to_direction(direction: Vector2):
 	move_direction = move_direction.move_toward(direction * MAX_SPEED, ACCELERATION)
 	hitbox.knockback_direction = move_direction
 	move_and_slide(move_direction)
+	
+	if move_direction.x > 0:
+		animated_sprite.play("runRight")
+		
+	if move_direction.x < 0:
+		animated_sprite.play("runLeft")
 	
 func set_hp(value: int):
 	if value <= 0:
