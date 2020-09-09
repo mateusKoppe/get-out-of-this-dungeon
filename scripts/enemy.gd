@@ -23,8 +23,9 @@ func _physics_process(delta):
 	var direction = Vector2.ZERO
 	match (state):
 		WANDER:
-			direction = global_position.direction_to(wander_direction)
-			move_to_direction(direction)
+			if global_position.distance_to(wander_direction) > MAX_SPEED / 10:
+				direction = global_position.direction_to(wander_direction)
+				move_to_direction(direction)
 			
 		CHASE:
 			if not chase_enemy:

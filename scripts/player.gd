@@ -47,24 +47,27 @@ func _physics_process(delta):
 	move_and_slide(move_direction)
 	
 func state_idle():
+	if Input.is_action_just_pressed("attack"):
+		state = ATTACK
+		return
+
 	var input_direction = get_input_direction()
 	move_direction = move_direction.move_toward(input_direction * MAX_SPEED, FRICTION)
 	animation_state.travel("Idle")
 	
-	if Input.is_action_just_pressed("attack"):
-		state = ATTACK
-	elif input_direction != Vector2.ZERO:
+	if input_direction != Vector2.ZERO:
 		state = MOVE
+		return
 
 func state_move():
 	var input_direction = get_input_direction()
 	
-	if input_direction == Vector2.ZERO:
-		state = IDLE
-		return
-		
 	if Input.is_action_just_pressed("attack"):
 		state = ATTACK
+		return
+	
+	if input_direction == Vector2.ZERO:
+		state = IDLE
 		return
 	
 	move_direction = move_direction.move_toward(input_direction * MAX_SPEED, ACCELERATION)
@@ -72,7 +75,6 @@ func state_move():
 	animation_tree.set("parameters/Idle/blend_position", input_direction)
 	animation_tree.set("parameters/Run/blend_position", input_direction)
 	animation_tree.set("parameters/Attack/blend_position", input_direction)
-	print(input_direction)
 	animation_state.travel("Run")
 		
 func state_attack():

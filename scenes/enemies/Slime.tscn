@@ -7,64 +7,64 @@
 [ext_resource path="res://scenes/combat/Hurtbox.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/enemies/PlayerDetection.tscn" type="PackedScene" id=6]
 
-[sub_resource type="CircleShape2D" id=6]
+[sub_resource type="CircleShape2D" id=1]
 radius = 3.16068
 
-[sub_resource type="AtlasTexture" id=15]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=16]
-atlas = ExtResource( 1 )
-region = Rect2( 16, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=17]
-atlas = ExtResource( 1 )
-region = Rect2( 32, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=18]
-atlas = ExtResource( 1 )
-region = Rect2( 48, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=10]
+[sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
 region = Rect2( 64, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 1 )
 region = Rect2( 80, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 1 )
 region = Rect2( 96, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=13]
+[sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 1 )
 region = Rect2( 112, 0, 16, 16 )
 
-[sub_resource type="SpriteFrames" id=14]
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 0, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=10]
 animations = [ {
-"frames": [ SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
-"loop": true,
-"name": "runLeft",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ) ],
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ) ],
 "loop": true,
 "name": "runRight",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
+"loop": true,
+"name": "runLeft",
+"speed": 5.0
 } ]
 
-[sub_resource type="CapsuleShape2D" id=7]
+[sub_resource type="CapsuleShape2D" id=11]
 radius = 3.65024
 height = 4.17659
 
-[sub_resource type="CapsuleShape2D" id=8]
+[sub_resource type="CapsuleShape2D" id=12]
 radius = 3.39287
-height = 5.65498
+height = 1.79241
 
-[sub_resource type="CircleShape2D" id=9]
-radius = 46.2136
+[sub_resource type="CircleShape2D" id=13]
+radius = 56.2094
 
 [node name="Slime" type="KinematicBody2D"]
 script = ExtResource( 3 )
@@ -74,13 +74,12 @@ max_hp = 3
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, -4.84739 )
-shape = SubResource( 6 )
+shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -8 )
-frames = SubResource( 14 )
+frames = SubResource( 10 )
 animation = "runLeft"
-frame = 1
 playing = true
 
 [node name="Wander" parent="." instance=ExtResource( 2 )]
@@ -95,9 +94,10 @@ collision_layer = 16
 [node name="HurtboxColisionShape" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2( 0, -5.45988 )
 rotation = 1.57079
-shape = SubResource( 7 )
+shape = SubResource( 11 )
 
 [node name="Hitbox" parent="." instance=ExtResource( 4 )]
+visible = false
 monitorable = true
 collision_mask = 2147483652
 knockback_stregth = 200
@@ -105,14 +105,14 @@ knockback_stregth = 200
 [node name="HitboxColisionShape" type="CollisionShape2D" parent="Hitbox"]
 position = Vector2( 0, -4.84739 )
 rotation = 1.57079
-shape = SubResource( 8 )
+shape = SubResource( 12 )
 
 [node name="PlayerDetection" parent="." instance=ExtResource( 6 )]
+visible = false
 position = Vector2( 0, -4.84739 )
 
 [node name="PlayerDetectionColisionShape" type="CollisionShape2D" parent="PlayerDetection"]
-visible = false
-shape = SubResource( 9 )
+shape = SubResource( 13 )
 [connection signal="new_target_position" from="Wander" to="." method="_on_Wander_new_target_position"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 [connection signal="player_entered" from="PlayerDetection" to="." method="_on_PlayerDetection_player_entered"]
