@@ -80,6 +80,7 @@ shape = SubResource( 1 )
 position = Vector2( 0, -8 )
 frames = SubResource( 10 )
 animation = "runLeft"
+frame = 3
 playing = true
 
 [node name="Wander" parent="." instance=ExtResource( 2 )]
